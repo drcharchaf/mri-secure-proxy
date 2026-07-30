@@ -1,4 +1,4 @@
-const SPREADSHEETWEB_ENDPOINT = 'https://private.spreadsheetweb.com/api/calculations/calculatesinglesimple';
+const SPREADSHEETWEB_ENDPOINT = 'https://api.spreadsheetweb.com/calculations/calculatesinglesimple';
 const ALLOWED_ORIGIN = 'https://money-and-risk-inventory.github.io';
 
 module.exports = async (req, res) => {
