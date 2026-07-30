@@ -119,9 +119,32 @@
     .asset-row{grid-template-columns:1fr 96px 34px}
     .dollar-input input{padding-left:20px;font-size:13.5px}
   }
+  @media print{
+    header.topbar, footer, .progress-wrap, .btn-row, .debug-toggle, .debug-panel, .eyebrow{display:none!important}
+    body{background:#fff}
+    main{padding:0;max-width:100%}
+    .card{box-shadow:none;border:none;padding:0}
+  }
+  .advisor-modal-overlay{position:fixed;inset:0;background:rgba(10,34,54,.55);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+  .advisor-modal{background:#fff;border-radius:16px;max-width:480px;padding:28px 30px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .advisor-modal h3{font-size:19px;margin-bottom:10px}
+  .advisor-modal p{font-size:14px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+  .advisor-modal .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);background:#faf3e8;border-radius:6px;padding:3px 9px;margin-bottom:14px}
+  @media print{ .advisor-modal-overlay{display:none!important} }
 </style>
 </head>
 <body>
+
+<div class="advisor-modal-overlay" id="advisorModal">
+  <div class="advisor-modal">
+    <div class="tag">Advisor Notice — Not Visible to Client</div>
+    <h3>Before Your Client Begins</h3>
+    <p><b>Tip:</b> When your client reaches the Report screen, click <b>Print Report</b> to give them a clean printed copy (it strips out navigation and buttons automatically).</p>
+    <div class="btn-row" style="margin-top:8px">
+      <button class="btn btn-primary" onclick="document.getElementById('advisorModal').style.display='none'">Continue to Client Assessment</button>
+    </div>
+  </div>
+</div>
 
 <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
   <defs>
@@ -277,6 +300,7 @@
       <div class="feedback-block" style="border-left-color:var(--warn)"><b>Potential Annual Loss (VAR):</b> <span id="out_var">—</span> — in any given year, this portfolio could lose roughly this much.</div>
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="goTo(2)">Back to Portfolio</button>
+        <button class="btn btn-secondary" onclick="window.print()">Print Report</button>
         <button class="btn btn-primary" onclick="goTo(4)">Explore the Sandbox</button>
       </div>
     </div>
