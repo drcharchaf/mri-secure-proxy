@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'MRI Secure <onboarding@resend.dev>',
+        from: 'MRI Secure <noreply@mail.moneyandriskinventory.com>',
         to: [advisorEmail],
         subject: 'Client Risk Assessment Completed — MRI Secure',
         html:
