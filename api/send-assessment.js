@@ -46,29 +46,3 @@ module.exports = async (req, res) => {
     res.status(502).json({ error: 'Failed to send email: ' + err.message });
   }
 };
-      },
-      body: JSON.stringify({
-        from: 'MRI Secure <noreply@mail.moneyandriskinventory.com>',
-        to: [advisorEmail],
-        subject: 'Client Risk Assessment Completed — MRI Secure',
-        html:
-          '<p>Your client' + (clientEmail ? ' (' + clientEmail + ')' : '') + ' has completed their MRI Secure risk assessment.</p>' +
-          '<p><a href="' + resumeLink + '">Click here to continue — enter their portfolio and generate the report</a></p>' +
-          '<p style="color:#888;font-size:12px">This link contains your client\'s assessment answers. Don\'t forward it to anyone outside your firm.</p>'
-      })
-    });
-
-    const text = await upstream.text();
-    let data;
-    try { data = JSON.parse(text); } catch { data = { raw: text }; }
-
-    if (!upstream.ok) {
-      res.status(upstream.status).json({ error: 'Resend error', details: data });
-      return;
-    }
-
-    res.status(200).json({ success: true, id: data.id });
-  } catch (err) {
-    res.status(502).json({ error: 'Failed to send email: ' + err.message });
-  }
-};
