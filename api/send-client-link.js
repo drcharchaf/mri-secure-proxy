@@ -1,4 +1,4 @@
-const { layout } = require('./_email');
+const { layout, MRI_LOGO_ATTACHMENT } = require('./_email');
 const ALLOWED_ORIGIN = 'https://money-and-risk-inventory.github.io';
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
@@ -38,7 +38,8 @@ module.exports = async (req, res) => {
         to: [clientEmail],
         reply_to: advisorEmail || undefined,
         subject: 'A Quick Financial Risk Assessment From Your Advisor',
-        html
+        html,
+        attachments: [MRI_LOGO_ATTACHMENT]
       })
     });
     const text = await upstream.text();

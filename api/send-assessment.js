@@ -1,4 +1,4 @@
-const { layout, esc } = require('./_email');
+const { layout, esc, MRI_LOGO_ATTACHMENT } = require('./_email');
 const ALLOWED_ORIGIN = 'https://money-and-risk-inventory.github.io';
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
@@ -38,7 +38,8 @@ module.exports = async (req, res) => {
         from: 'MRI Secure <noreply@mail.moneyandriskinventory.com>',
         to: [advisorEmail],
         subject: 'Client Risk Assessment Completed — MRI Secure',
-        html
+        html,
+        attachments: [MRI_LOGO_ATTACHMENT]
       })
     });
     const text = await upstream.text();
