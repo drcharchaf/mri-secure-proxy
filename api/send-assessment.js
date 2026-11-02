@@ -1,3 +1,4 @@
+const { layout, esc } = require('./_email');
 const ALLOWED_ORIGIN = 'https://money-and-risk-inventory.github.io';
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', ALLOWED_ORIGIN);
@@ -11,11 +12,21 @@ module.exports = async (req, res) => {
     res.status(405).json({ error: 'Method not allowed. Use POST.' });
     return;
   }
-  const { advisorEmail, clientEmail, resumeLink } = req.body || {};
+  const { advisorEmail, clientEmail, resumeLink, firmName, firmLogo } = req.body || {};
   if (!advisorEmail || !resumeLink) {
     res.status(400).json({ error: 'Missing advisorEmail or resumeLink.' });
     return;
   }
+  const html = layout({
+    firmName, firmLogo,
+    heading: 'Your client completed their assessment',
+    bodyHtml: '<p style="margin:0">Your client' + (clientEmail ? ' (' + esc(clientEmail) + ')' : '') +
+      ' has finished the MRI Secure risk assessment. Their answers are saved and ready.</p>' +
+      '<p style="margin:12px 0 0">Next, enter their portfolio holdings to see their Annuity Fit Score, portfolio report, and Sandbox.</p>',
+    buttonText: 'Continue &mdash; Enter Portfolio &amp; Generate Report',
+    buttonUrl: resumeLink,
+    footnote: 'This button contains your client\'s assessment answers. Please don\'t forward this email outside your firm.'
+  });
   try {
     const upstream = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -27,11 +38,7 @@ module.exports = async (req, res) => {
         from: 'MRI Secure <noreply@mail.moneyandriskinventory.com>',
         to: [advisorEmail],
         subject: 'Client Risk Assessment Completed — MRI Secure',
-        html:
-          '<p>Your client' + (clientEmail ? ' (' + clientEmail + ')' : '') + ' has completed their MRI Secure risk assessment.</p>' +
-          '<p style="margin:22px 0"><a href="' + resumeLink + '" style="display:inline-block;background:#2e69a3;color:#ffffff;font-weight:600;font-size:15px;padding:12px 24px;border-radius:8px;text-decoration:none">Continue — Enter Portfolio &amp; Generate Report</a></p>' +
-          '<p style="color:#888;font-size:12px">If the button above doesn\'t work, copy and paste this link into your browser:<br>' + resumeLink + '</p>' +
-          '<p style="color:#888;font-size:12px">This link contains your client\'s assessment answers. Don\'t forward it to anyone outside your firm.</p>'
+        html
       })
     });
     const text = await upstream.text();
